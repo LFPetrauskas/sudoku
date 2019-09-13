@@ -1,0 +1,30 @@
+.box {
+    outline: none;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: 1em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 1vw;
+    border: 1px solid #80808022;
+    /* height: 100%;
+    width: 100%; */
+}
+
+.box option {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.right {
+    border-right: 2px solid black;
+}
+
+.bottom {
+    border-bottom: 2px solid black;
+}
+.bg {
+    background-color: #00000011;
+}

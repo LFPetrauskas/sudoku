@@ -1,0 +1,13 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(9, 11.1%);
+    grid-template-rows: repeat(9, 11.1%);
+    width: 600px;
+    height: 600px;
+    border: 1px solid black;
+}
+
+/* .block {
+    display: grid;
+    border: 2px solid black;
+} */
