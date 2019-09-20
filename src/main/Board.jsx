@@ -2,9 +2,9 @@ import React from 'react';
 import Box from '../components/Box';
 import './Board.css';
 let key = 0;
-let board = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+let board = [['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
+['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
+['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', '']];
 
 
 function Message(props) {
@@ -25,10 +25,10 @@ export default class Board extends React.Component {
         this.changeBoardValue = this.changeBoardValue.bind(this);
         this.verifyCol = this.verifyCol.bind(this);
         this.verifyRow = this.verifyRow.bind(this);
-
+        this.verify = this.verify.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         let boxes = [];
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
@@ -41,18 +41,40 @@ export default class Board extends React.Component {
     changeBoardValue(row, col, value) {
         let { board } = this.state;
         board[row][col] = value;
-        if (this.state.verifyRow(row, value) > 1 || this.state.verifyCol(col, value) > 1)
-            this.setState({message: 'Valor inválido'})
+        this.setState({ board, message: '' })
+        if (this.verifyRow(row, this.state.board) > 0 || this.verifyCol(col, this.state.board) > 0)
+            this.setState({ message: 'Valor inválido' })
     }
 
-    verifyRow(row, value, board) {
-        let result = board[row].filter(val => val === value);
-        return result.length;
+    verifyRow(row, board) {
+        return this.verify(board[row].filter(val => val !== ''));
     }
 
-    verifyCol(col, value, board) {
-        let result = board.filter(x => x[col] === value);
-        return result.length;
+    verifyCol(col, board) {
+        let arr = [];
+        for (let i = 0; i < 9; i++) {
+            if (board[i][col] !== '') {
+                arr.push(board[i][col]);
+            }
+        }
+        return this.verify(arr)
+    }
+
+    verify(arr) {
+        let exists = false;
+        for (let j = 0; j < arr.length; j++) {
+            for (let i = 0; i < arr.length; i++) {
+                if (i === j) continue;
+                if (arr[i] === arr[j]) {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+
+        if (exists)
+            return 1;
+        return 0;
     }
 
     render() {

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import './Box.css';
 
 export default props => {
-    let [value, setValue] = useState(0);
+    let [value, setValue] = useState('');
+
     let row = props.row;
     let col = props.col;
     let rightBorder = (((col + 1) % 3) === 0) && col !== 8 ? 'right' : '';
     let bottomBorder = (((row + 1) % 3) === 0) && row !== 8 ? 'bottom' : '';
-    let bg = value !== 0 ? 'bg' : '';
+    let bg = value !== '' ? 'bg' : '';
 
     function change(e) {
         let val = e.target.value;
