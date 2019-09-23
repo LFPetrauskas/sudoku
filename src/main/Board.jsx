@@ -1,11 +1,7 @@
 import React from 'react';
 import Box from '../components/Box';
+// import {initBoard, verify, verifyCol, verifyRow, verifySqr,} from '../game/Game';
 import './Board.css';
-let key = 0;
-let board = [['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
-['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
-['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', '']];
-
 
 function Message(props) {
     return (
@@ -26,24 +22,55 @@ export default class Board extends React.Component {
         this.verifyCol = this.verifyCol.bind(this);
         this.verifyRow = this.verifyRow.bind(this);
         this.verify = this.verify.bind(this);
+        this.verifySqr = this.verifySqr.bind(this);
     }
 
     componentDidMount() {
+        let key = 0;
+        let board = this.initializeBoard('');
         let boxes = [];
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
-                boxes.push(<Box key={`block${key++}`} col={col} row={row} changeBoardValue={this.changeBoardValue} />);
+                let blocked = board[row][col] !== '' ? true : false;
+                let initialValue = board[row][col];
+                boxes.push(<Box key={`block${key++}`} col={col} row={row} changeBoardValue={this.changeBoardValue} blocked={blocked} value={initialValue} />);
             }
         }
         this.setState({ boxes, board })
+    }
+
+    initializeBoard(difficulty) {
+        // let item = { value: '', possibilities: [1, 2, 3, 4, 5, 6, 7, 8, 9] };
+        let board = [['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', '']];
+        // for (let row = 0; row < 9; row++) {
+        //     let possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        //     for (let col = 0; col < 9; col++) {
+        //         let proceed = false;
+        //         while (!proceed) {
+        //             let p = Math.floor(Math.random() * possibilities.length);
+        //             board[row][col] = possibilities[p];
+        //             if (this.verifyCol(col, board) === 0 && this.verifyRow(row, board) === 0 && this.verifySqr(row, col, board) === 0) {
+        //                 proceed = true;
+        //                 board[row][col] = possibilities[p];
+        //             } else {
+        //                 board[row][col] = '';
+        //                 possibilities = possibilities.filter((x, y) => y !== p);
+        //             }
+        //         }
+
+        //     }
+        // }
+        return board;
     }
 
     changeBoardValue(row, col, value) {
         let { board } = this.state;
         board[row][col] = value;
         this.setState({ board, message: '' })
-        if (this.verifyRow(row, this.state.board) > 0 || this.verifyCol(col, this.state.board) > 0)
-            this.setState({ message: 'Valor inválido' })
+        if (this.verifyRow(row, this.state.board) > 0 || this.verifyCol(col, this.state.board) > 0 || this.verifySqr(row, col, this.state.board) > 0)
+            this.setState({ message: 'Valor inválido' });
     }
 
     verifyRow(row, board) {
@@ -58,6 +85,18 @@ export default class Board extends React.Component {
             }
         }
         return this.verify(arr)
+    }
+
+    verifySqr(row, col, board) {
+        let arr = [];
+        let [x, y] = [Math.floor((row) / 3) * 3, Math.floor((col) / 3) * 3];
+        for (let i = x; i < x + 3; i++) {
+            for (let j = y; j < y + 3; j++) {
+                if (board[i][j] !== '')
+                    arr.push(board[i][j]);
+            }
+        }
+        return this.verify(arr);
     }
 
     verify(arr) {
