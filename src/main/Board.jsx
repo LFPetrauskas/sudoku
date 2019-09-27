@@ -41,9 +41,36 @@ export default class Board extends React.Component {
 
     initializeBoard(difficulty) {
         // let item = { value: '', possibilities: [1, 2, 3, 4, 5, 6, 7, 8, 9] };
-        let board = [['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', '']];
+        // let board = [[item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item],
+        // [item, item, item, item, item, item, item, item, item]];
+
+        let item = { value: '', possibilities: [1, 2, 3] };
+        let board = [[item, item, item], [item, item, item], [item, item, item]];
+
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                let i = board[row][col];
+                let lengthp = i.possibilities.length;
+                let s = Math.floor(Math.random() * lengthp);
+                let v = i.possibilities[s];
+                board[row][col].value = v;
+                for (let x = 0; x < 3; x++) {
+                    board[x][col].possibilities = board[x][col].possibilities.filter(e => e !== v);
+                }
+                for (let y = 0; y < 3; y++) {
+                    board[row][y].possibilities = board[row][y].possibilities.filter(e => e !== v);
+                }
+            }
+        }
+
+        console.log(board)
         // for (let row = 0; row < 9; row++) {
         //     let possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         //     for (let col = 0; col < 9; col++) {
@@ -62,6 +89,9 @@ export default class Board extends React.Component {
 
         //     }
         // }
+        board = [['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', '', '']];
         return board;
     }
 
